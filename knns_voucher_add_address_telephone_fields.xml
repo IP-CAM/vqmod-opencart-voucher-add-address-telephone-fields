@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification
+	xmlns="https://github.com/vqmod/vqmod"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd">
+	>
+	<id><![CDATA[[VQMOD] Add address & telephone fields in voucher]]></id>
+	<version>1.0.0</version>
+	<vqmver>2.6.3</vqmver>
+	<author>kanenas.net (aka Nikolas Branis) - nbran@kanenas.net</author>
+	<file path="admin/controller/sale/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA[$data['entry_to_email'] = $this->language->get('entry_to_email');]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		$data['entry_to_address'] = $this->language->get('entry_to_address');
+		$data['entry_to_telephone'] = $this->language->get('entry_to_telephone');
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if (isset($this->error['to_email'])) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		if (isset($this->error['to_address'])) {
+			$data['error_to_address'] = $this->error['to_address'];
+		} else {
+			$data['error_to_address'] = '';
+		}
+
+		if (isset($this->error['to_telephone'])) {
+			$data['error_to_telephone'] = $this->error['to_telephone'];
+		} else {
+			$data['error_to_telephone'] = '';
+		}
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if (isset($this->request->post['to_email'])) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		if (isset($this->request->post['to_address'])) {
+			$data['to_address'] = $this->request->post['to_address'];
+		} elseif (!empty($voucher_info)) {
+			$data['to_address'] = $voucher_info['to_address'];
+		} else {
+			$data['to_address'] = '';
+		}
+
+		if (isset($this->request->post['to_telephone'])) {
+			$data['to_telephone'] = $this->request->post['to_telephone'];
+		} elseif (!empty($voucher_info)) {
+			$data['to_telephone'] = $voucher_info['to_telephone'];
+		} else {
+			$data['to_telephone'] = '';
+		}
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if ((utf8_strlen($this->request->post['to_email']) > 96) || !preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $this->request->post['to_email'])) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		if ((utf8_strlen($this->request->post['to_address']) < 5) || (utf8_strlen($this->request->post['to_address']) > 300)) {
+			$this->error['to_address'] = $this->language->get('error_to_address');
+		}
+
+		if ((utf8_strlen($this->request->post['to_telephone']) < 10)) {
+			$this->error['to_telephone'] = $this->language->get('error_to_telephone');
+		}
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/language/english/sale/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['entry_to_email']    = 'To E-Mail';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['entry_to_address']   = 'To Address';
+$_['entry_to_telephone'] = 'To Telephone';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['error_email']       = 'E-Mail Address does not appear to be valid!';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['error_to_address']      = 'To Address must be between 5 and 300 characters!';
+$_['error_to_telephone']    = 'To Telephone must be at least 10 characters!';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/language/greek/sale/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['entry_to_email']    = 'E-mail Παραλήπτη';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['entry_to_address']   = 'Διεύθυνση Παραλήπτη';
+$_['entry_to_telephone'] = 'Τηλέφωνο Παραλήπτη';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['error_email']       = 'Η διεύθυνση e-mail δε φαίνεται να είναι έγκυρη!';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['error_to_address']      = 'Η Διεύθυνση Παραλήπτη πρέπει να είναι από 5 έως 300 χαρακτήρες!';
+$_['error_to_telephone']    = 'Το Τηλέφωνο Παραλήπτη πρέπει να είναι τουλάχιστον 10 χαρακτήρες!';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/model/sale/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="replace"><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		$this->db->query("INSERT INTO " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_address = '" . $this->db->escape($data['to_address']) . "', to_telephone = '" . $this->db->escape($data['to_telephone']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[$this->db->query("UPDATE " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "' WHERE voucher_id = '" . (int)$voucher_id . "'");]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		$this->db->query("UPDATE " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_address = '" . $this->db->escape($data['to_address']) . "', to_telephone = '" . $this->db->escape($data['to_telephone']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "' WHERE voucher_id = '" . (int)$voucher_id . "'");
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[$sql = "SELECT v.voucher_id, v.code, v.from_name, v.from_email, v.to_name, v.to_email, (SELECT vtd.name FROM " . DB_PREFIX . "voucher_theme_description vtd WHERE vtd.voucher_theme_id = v.voucher_theme_id AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS theme, v.amount, v.status, v.date_added FROM " . DB_PREFIX . "voucher v";]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		$sql = "SELECT v.voucher_id, v.code, v.from_name, v.from_email, v.to_name, v.to_address, v.to_telephone, v.to_email, (SELECT vtd.name FROM " . DB_PREFIX . "voucher_theme_description vtd WHERE vtd.voucher_theme_id = v.voucher_theme_id AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS theme, v.amount, v.status, v.date_added FROM " . DB_PREFIX . "voucher v";
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA['v.to_email',]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+			'v.to_address',
+			'v.to_telephone',
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="admin/view/template/sale/" name="voucher_form.tpl" error="log">
+		<operation error="skip">
+			<search position="before" offset="5"><![CDATA[<div class="text-danger"><?php echo $error_to_email; ?></div>]]></search>
+			<add><![CDATA[
+              <?php // kanenas: knns_voucher_add_address_telephone_fields.xml (start) << ?>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-to-address"><?php echo $entry_to_address; ?></label>
+                <div class="col-sm-10">
+                  <input type="text" name="to_address" value="<?php echo $to_address; ?>" placeholder="<?php echo $entry_to_address; ?>" id="input-to-address" class="form-control" />
+                  <?php if ($error_to_address) { ?>
+                  <div class="text-danger"><?php echo $error_to_address; ?></div>
+                  <?php } ?>
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-to-telephone"><?php echo $entry_to_telephone; ?></label>
+                <div class="col-sm-10">
+                  <input type="text" name="to_telephone" value="<?php echo $to_telephone; ?>" placeholder="<?php echo $entry_to_telephone; ?>" id="input-to-telephone" class="form-control" />
+                  <?php if ($error_to_telephone) { ?>
+                  <div class="text-danger"><?php echo $error_to_telephone; ?></div>
+                  <?php } ?>
+                </div>
+              </div>
+              <?php // kanenas: knns_voucher_add_address_telephone_fields.xml (end) << ?>
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/controller/account/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA['to_email'         => $this->request->post['to_email'],]]></search>
+			<add><![CDATA[
+				// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+				'to_address'       => $this->request->post['to_address'],
+				'to_telephone'     => $this->request->post['to_telephone'],
+				// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[$data['entry_to_email'] = $this->language->get('entry_to_email');]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		$data['entry_to_address'] = $this->language->get('entry_to_address');
+		$data['entry_to_telephone'] = $this->language->get('entry_to_telephone');
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if (isset($this->error['to_email'])) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		if (isset($this->error['to_address'])) {
+			$data['error_to_address'] = $this->error['to_address'];
+		} else {
+			$data['error_to_address'] = '';
+		}
+
+		if (isset($this->error['to_telephone'])) {
+			$data['error_to_telephone'] = $this->error['to_telephone'];
+		} else {
+			$data['error_to_telephone'] = '';
+		}
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if (isset($this->request->post['to_email'])) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		if (isset($this->request->post['to_address'])) {
+			$data['to_address'] = $this->request->post['to_address'];
+		} else {
+			$data['to_address'] = '';
+		}
+
+		if (isset($this->request->post['to_telephone'])) {
+			$data['to_telephone'] = $this->request->post['to_telephone'];
+		} else {
+			$data['to_telephone'] = '';
+		}
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if ((utf8_strlen($this->request->post['to_email']) > 96) || !preg_match('/^[^\@]+@.*.[a-z]{2,15}$/i', $this->request->post['to_email'])) {]]></search>
+			<add><![CDATA[
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		if ((utf8_strlen($this->request->post['to_address']) < 5) || (utf8_strlen($this->request->post['to_address']) > 300)) {
+			$this->error['to_address'] = $this->language->get('error_to_address');
+		}
+
+		if ((utf8_strlen($this->request->post['to_telephone']) < 10)) {
+			$this->error['to_telephone'] = $this->language->get('error_to_telephone');
+		}
+		// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/model/total/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="replace"><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "voucher SET order_id = '" . (int)$order_id . "', code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '1', date_added = NOW()");]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+		$this->db->query("INSERT INTO " . DB_PREFIX . "voucher SET order_id = '" . (int)$order_id . "', code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_address = '" . $this->db->escape($data['to_address']) . "', to_telephone = '" . $this->db->escape($data['to_telephone']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '1', date_added = NOW()");
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA['to_email'         => $voucher_query->row['to_email'],]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+				'to_address'       => $voucher_query->row['to_address'],
+				'to_telephone'     => $voucher_query->row['to_telephone'],
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/model/journal2/" name="checkout.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA['to_email'         => $voucher['to_email'],]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+                    'to_address'         => $voucher['to_address'],
+                    'to_telephone'       => $voucher['to_telephone'],
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/english/account/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['entry_to_email']   = 'Recipient\'s e-mail';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['entry_to_address']   = 'Recipient\'s Address';
+$_['entry_to_telephone'] = 'Recipient\'s Telephone';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['error_email']      = 'E-Mail Address does not appear to be valid!';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['error_to_address']      = 'Recipient\'s Address must be between 5 and 300 characters!';
+$_['error_to_telephone']    = 'Recipient\'s Telephone must be at least 10 characters!';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/language/greek/account/" name="voucher.php" error="log">
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['entry_to_email']   = 'E-mail παραλήπτη';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['entry_to_address']   = 'Διεύθυνση Παραλήπτη';
+$_['entry_to_telephone'] = 'Τηλέφωνο Παραλήπτη';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[$_['error_email']      = 'H διεύθυνση e-mail δε φαίνεται να είναι έγκυρη!';]]></search>
+			<add><![CDATA[
+// kanenas: knns_voucher_add_address_telephone_fields.xml (start) <<
+$_['error_to_address']      = 'Η Διεύθυνση Παραλήπτη πρέπει να είναι από 5 έως 300 χαρακτήρες!';
+$_['error_to_telephone']    = 'Το Τηλέφωνο Παραλήπτη πρέπει να είναι τουλάχιστον 10 χαρακτήρες!';
+// kanenas: knns_voucher_add_address_telephone_fields.xml (end) <<
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/journal2/template/account/" name="voucher.tpl" error="log">
+		<operation error="skip">
+			<search position="before" offset="5"><![CDATA[<div class="text-danger"><?php echo $error_to_email; ?></div>]]></search>
+			<add><![CDATA[
+        <?php // kanenas: knns_voucher_add_address_telephone_fields.xml (start) << ?>
+        <div class="form-group required">
+          <label class="col-sm-2 control-label" for="input-to-address"><?php echo $entry_to_address; ?></label>
+          <div class="col-sm-10">
+            <input type="text" name="to_address" value="<?php echo $to_address; ?>" id="input-to-address" class="form-control" />
+            <?php if ($error_to_address) { ?>
+            <div class="text-danger"><?php echo $error_to_address; ?></div>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group required">
+          <label class="col-sm-2 control-label" for="input-to-telephone"><?php echo $entry_to_telephone; ?></label>
+          <div class="col-sm-10">
+            <input type="text" name="to_telephone" value="<?php echo $to_telephone; ?>" id="input-to-telephone" class="form-control" />
+            <?php if ($error_to_telephone) { ?>
+            <div class="text-danger"><?php echo $error_to_telephone; ?></div>
+            <?php } ?>
+          </div>
+        </div>
+        <?php // kanenas: knns_voucher_add_address_telephone_fields.xml (end) << ?>
+			]]></add>
+		</operation>
+	</file>
+</modification>
